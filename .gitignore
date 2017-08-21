@@ -3,6 +3,7 @@
 
 # Python
 */__pycache__/*
+*.pyc
 
 # tex files
 *.aux

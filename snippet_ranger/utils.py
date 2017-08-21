@@ -1,10 +1,10 @@
 from collections import defaultdict
 
 from ast2vec import Source
-from ast2vec.bblfsh_roles import get_role_id
+from ast2vec import bblfsh_roles
 
 
-def uast_to_bag(uast, bag=None, role="SIMPLE_IDENTIFIER"):
+def uast_to_bag(uast, bag=None, role=bblfsh_roles.SIMPLE_IDENTIFIER):
     """
     Convert UAST to bag of words for certain role.
 
@@ -15,35 +15,33 @@ def uast_to_bag(uast, bag=None, role="SIMPLE_IDENTIFIER"):
     """
     if bag is None:
         bag = defaultdict(int)
-    # (Konst) Can be optimised if we need
+    #TODO(zurk): Can be optimised if we need. uast_role_nodes make a list from one role.
     for node in uast_role_nodes(uast, roles=role):
         if node.token != "":
             bag[node.token] += 1
     return bag
 
 
-def uast_role_nodes(uast, roles=None):
+def uast_role_nodes(uast, roles=None) -> iter:
     """
     Filter UAST by provided roles and iterate trough corresponding nodes of uast.
+    It is a generator.
 
     :param uast:
     :param roles: roles to filter.
     :return: iterator trough corresponding nodes.
     """
     if roles is None:
-        roles = ["SIMPLE_IDENTIFIER"]
-    if isinstance(roles, str):
-        role_ids = [get_role_id(roles)]
+        roles = [bblfsh_roles.SIMPLE_IDENTIFIER]
     elif isinstance(roles, int):
-        role_ids = [roles]
-    elif isinstance(roles, list):
-        role_ids = [get_role_id(r) if isinstance(r, str) else r for r in roles]
-    else:
+        roles = [roles]
+    elif not isinstance(roles, list):
         raise TypeError()
+
     stack = [uast]
     while stack:
         node = stack.pop(0)
-        for role_id in role_ids:
+        for role_id in roles:
             if role_id in node.roles:
                 yield node
                 break
@@ -52,9 +50,9 @@ def uast_role_nodes(uast, roles=None):
 
 def _iter_imports(uast):
     """
-    Itrernal helper function to iterate through uast's imports
+    Internal helper function to iterate through uast's imports
     """
-    for n in uast_role_nodes(uast, ["IMPORT_PATH", "IMPORT_ALIAS"]):
+    for n in uast_role_nodes(uast, [bblfsh_roles.IMPORT_PATH, bblfsh_roles.IMPORT_ALIAS]):
         for x in n.token.split('.'):
             yield x
 
@@ -67,7 +65,7 @@ def get_imports(uast):
     :param uast:
     :return: set of import names
     """
-    return set([x for x in _iter_imports(uast)])
+    return set(_iter_imports(uast))
 
 
 def has_import(libname, uast) -> bool:
@@ -93,5 +91,5 @@ def get_func_names_bow(source_model: Source) -> dict:
     """
     func_names = None
     for filename, uast, source in source_model:
-        func_names = uast_to_bag(uast, func_names, "FUNCTION_DECLARATION_NAME")
+        func_names = uast_to_bag(uast, func_names, bblfsh_roles.FUNCTION_DECLARATION_NAME)
     return func_names

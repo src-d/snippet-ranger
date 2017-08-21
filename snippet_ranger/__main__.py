@@ -6,7 +6,7 @@ from modelforge.logs import setup_logging
 from ast2vec.__main__ import one_arg_parser
 
 from snippet_ranger.model2.source2func import source2func_entry
-from snippet_ranger.dependent_reps import dependent_reps_entry, LibIO
+from snippet_ranger.librariesio_fetcher import dependent_reps_entry, LibrariesIOFetcher
 
 def get_parser() -> argparse.ArgumentParser:
     """
@@ -76,7 +76,7 @@ def get_parser() -> argparse.ArgumentParser:
         '--librariesio_data', required=True,
         help="Provide the path to libraries.io dataset.")
     dependent_reps_parser.add_argument(
-        '--platform', default=LibIO.DEFAULT_PLATFORM,
+        '--platform', default=LibrariesIOFetcher.DEFAULT_PLATFORM,
         help="The name of package manager.")
 
     return parser
