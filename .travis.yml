@@ -6,6 +6,10 @@ services:
 cache:
   directories:
   - "$HOME/.cache/pip"
+addons:
+  apt:
+    packages:
+      - libboost-all-dev
 _install: &_install
   - gimme 1.8
   - source ~/.gimme/envs/latest.env
@@ -13,7 +17,7 @@ _install: &_install
   - pip install -r requirements.txt codecov
   - pip install -e .
 _coverage: &_coverage
-  - SCRIPT="coverage run -m unittest discover"
+  - SCRIPT="coverage run --concurrency=multiprocessing -m unittest discover && coverage combine"
 matrix:
   include:
     - python: 3.4

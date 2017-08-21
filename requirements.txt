@@ -1,3 +1,5 @@
-git+https://github.com/bblfsh/client-python.git@v0.0.4#egg=bblfsh
-git+https://github.com/src-d/modelforge.git@develop#egg=modelforge
-git+https://github.com/src-d/ast2vec.git@develop#egg=ast2vec
+asdf>=1.2,<2.0
+modelforge>=0.2.6-alpha
+bblfsh>=0.0.4
+pandas>=0.20
+ast2vec>=0.2.2-alpha
