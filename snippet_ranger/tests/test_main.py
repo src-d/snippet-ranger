@@ -1,9 +1,26 @@
 import argparse
+from contextlib import contextmanager
+from io import StringIO
 import sys
 import unittest
+import logging
 
 import snippet_ranger.__main__ as main
-from ast2vec.tests.test_dump import captured_output
+
+
+@contextmanager
+def captured_output():
+    log = StringIO()
+    log_handler = logging.StreamHandler(log)
+    logging.getLogger().addHandler(log_handler)
+    new_out, new_err = StringIO(), StringIO()
+    old_out, old_err = sys.stdout, sys.stderr
+    try:
+        sys.stdout, sys.stderr = new_out, new_err
+        yield sys.stdout, sys.stderr, log
+    finally:
+        sys.stdout, sys.stderr = old_out, old_err
+        logging.getLogger().removeHandler(log_handler)
 
 
 class MainTests(unittest.TestCase):

@@ -60,9 +60,8 @@ class Model2BaseSplit(Model2Base):
             out_model_part = self.split_model_object(model_from, model_object)
             for out_model_object in self.filter_output_model_object(out_model_part):
                 result.append(out_model_object)
-        out_model = self.MODEL_TO_CLASS()
         if result:
-            out_model.construct(*zip(*result))
+            out_model = self.construct(model_from, result)
         else:
             raise ValueError("All functions are filtered and you get empty model.")
         return out_model
@@ -74,5 +73,16 @@ class Model2BaseSplit(Model2Base):
         :param model_from: The full input model instance.
         :param model_object: The current model object instance to split.
         :return: List or tuple of parameters for output model objects initialization.
+        """
+        raise NotImplementedError
+
+    def construct(self, model_from: Model, result: list) -> Model:
+        """
+        Construct out model from objects.
+        This function must be implemented in the child classes.
+
+        :param model_from: The full input model instance.
+        :param result: objects from `split_model_object`
+        :return: Output model.
         """
         raise NotImplementedError

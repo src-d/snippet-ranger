@@ -15,7 +15,7 @@ def uast_to_bag(uast, bag=None, role=bblfsh_roles.SIMPLE_IDENTIFIER):
     """
     if bag is None:
         bag = defaultdict(int)
-    #TODO(zurk): Can be optimised if we need. uast_role_nodes make a list from one role.
+    # TODO(zurk): Can be optimised if we need. uast_role_nodes make a list from one role.
     for node in uast_role_nodes(uast, roles=role):
         if node.token != "":
             bag[node.token] += 1
@@ -53,7 +53,7 @@ def _iter_imports(uast):
     Internal helper function to iterate through uast's imports
     """
     for n in uast_role_nodes(uast, [bblfsh_roles.IMPORT_PATH, bblfsh_roles.IMPORT_ALIAS]):
-        for x in n.token.split('.'):
+        for x in n.token.split("."):
             yield x
 
 

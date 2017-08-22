@@ -8,6 +8,7 @@ from ast2vec.__main__ import one_arg_parser
 from snippet_ranger.model2.source2func import source2func_entry
 from snippet_ranger.librariesio_fetcher import dependent_reps_entry, LibrariesIOFetcher
 
+
 def get_parser() -> argparse.ArgumentParser:
     """
     Create main parser.
@@ -61,22 +62,22 @@ def get_parser() -> argparse.ArgumentParser:
     group_ex.add_argument(
         "--libraries_json",
         help="Provide the input file in json format. It should represent dictionary of library "
-             "name, url pairs. You can specify empty url if you not sure. "
+             "name, url pairs. You can specify empty url if you are not sure. "
              "Excludes --libraries flag.")
     group_ex.add_argument(
         "--libraries", nargs="+",
         help="The name-url pair of the library in format <library name>:<library url>. You can "
-             "specify empty url if you not sure. Excludes --libraries_json flag.")
+             "specify empty url if you are not sure. Excludes --libraries_json flag.")
     dependent_reps_parser.add_argument(
-        '-o', '--output', required=True,
+        "-o", "--output", required=True,
         help="Where to write the list of dependent repos links. Save location for urls. "
              "Specify folder if you have several libraries. Then urls will be stored in the file "
              "<library name>.txt . You can specify file, then all urls will be saved in one file.")
     dependent_reps_parser.add_argument(
-        '--librariesio_data', required=True,
+        "--librariesio_data", required=True,
         help="Provide the path to libraries.io dataset.")
     dependent_reps_parser.add_argument(
-        '--platform', default=LibrariesIOFetcher.DEFAULT_PLATFORM,
+        "--platform", default=LibrariesIOFetcher.DEFAULT_PLATFORM,
         help="The name of package manager.")
 
     return parser

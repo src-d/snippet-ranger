@@ -55,7 +55,7 @@ class Source2Func(Model2BaseSplit):
         for func_node in func_nodes:
             pos_start, pos_end = func_node.start_position.line-1, func_node.end_position.line
             func_source = '\n'.join(source.splitlines()[pos_start:pos_end])
-            yield model_from.repository, filename, func_source, func_node, pos_start, pos_end
+            yield filename, func_source, func_node, pos_start, pos_end
 
     def output_model_object_criteria(self, model_object):
         """
@@ -65,14 +65,16 @@ class Source2Func(Model2BaseSplit):
         :param model_object: Source model object.
         :return: Library functions usage indicator.
         """
-        func_node = model_object[3]
+        func_node = model_object[2]
         func_names = uast_to_bag(func_node, role=CALL_CALLEE)
-        func_names = uast_to_bag(func_node, func_names, role=CALL)
 
         common = set(self.lib_funcs_bow) & set(func_names)
         if len(common) > self.threshold:
             return True
         return False
+
+    def construct(self, model_from, result):
+        return Source2Func.MODEL_TO_CLASS().construct(model_from.repository, *zip(*result))
 
 
 def process_lib_functions(functions_bow):
@@ -80,9 +82,15 @@ def process_lib_functions(functions_bow):
     Remove bad function names from function bag of words. Specific for Python.
     Removes internal functions and test functions.
     """
-    exclude = ["^\_\w*", '^test\w*']
-    pattern = re.compile("(" + "|".join(exclude) + ")")
-    clear_functions_bow = {k: v for k, v in functions_bow.items() if not pattern.match(k)}
+    bad_prefixes = ["_", "test"]
+    clear_functions_bow = {}
+    for k, v in functions_bow.items():
+        for bad_prefix in bad_prefixes:
+            if k.startswith(bad_prefix):
+                break
+        else:
+            clear_functions_bow[k] = v
+
     return clear_functions_bow
 
 
