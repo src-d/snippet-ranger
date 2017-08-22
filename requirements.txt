@@ -1,2 +1,2 @@
 pandas>=0.20
-ast2vec>=0.2.2-alpha
+ast2vec[tf]>=0.2.2-alpha

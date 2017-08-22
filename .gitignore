@@ -1,6 +1,10 @@
 # Mac specific
 *.DS_Store
 
+# Python
+*/__pycache__/*
+*.pyc
+
 # tex files
 *.aux
 *.bbl
@@ -17,3 +21,9 @@
 
 # jupyter notebooks
 *.ipynb_checkpoints/
+
+# pycharm
+.idea
+
+#LibraryIO data
+data/Libraries/*
