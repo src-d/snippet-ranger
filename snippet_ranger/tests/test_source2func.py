@@ -62,7 +62,7 @@ class Source2FuncTests(unittest.TestCase):
                                       log_level=logging.INFO,
                                       processes=1)
             source2func_entry(args)
-            validate_asdf_file(self, os.path.join(tmpdir, "test_repo.asdf"))
+            validate_asdf_file(self, os.path.join(tmpdir, "source_test_repo.asdf"))
 
 
 if __name__ == "__main__":

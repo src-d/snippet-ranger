@@ -7,6 +7,8 @@ from ast2vec.__main__ import one_arg_parser
 
 from snippet_ranger.model2.source2func import source2func_entry
 from snippet_ranger.librariesio_fetcher import dependent_reps_entry, LibrariesIOFetcher
+from snippet_ranger.model2.snippet2df import snippet2df_entry
+from snippet_ranger.model2.snippet2bow import snippet2bow_entry
 
 
 def get_parser() -> argparse.ArgumentParser:
@@ -34,6 +36,12 @@ def get_parser() -> argparse.ArgumentParser:
 
     library_name_arg = one_arg_parser(
         "--library_name", help="Provide the name of the library.")
+
+    tmpdir_arg = one_arg_parser(
+        "--tmpdir", help="Store intermediate files in this directory instead of /tmp.")
+
+    df_arg = one_arg_parser(
+        "-d", "--df", dest="docfreq", help="URL or path to the document frequencies.")
 
     # Create and construct subparsers
 
@@ -79,6 +87,23 @@ def get_parser() -> argparse.ArgumentParser:
     dependent_reps_parser.add_argument(
         "--platform", default=LibrariesIOFetcher.DEFAULT_PLATFORM,
         help="The name of package manager.")
+
+    snippet2df_parser = subparsers.add_parser(
+        "snippet2df", help="Calculate identifier document frequencies from uasts for snippets."
+                           "It counts each snippet separately.",
+        parents=[model2input_arg, filter_arg, tmpdir_arg, process_arg])
+    snippet2df_parser.set_defaults(handler=snippet2df_entry)
+    snippet2df_parser.add_argument("output", help="Where to write document frequencies.")
+
+    snippet2bow_parser = subparsers.add_parser(
+        "snippet2bow", help="Calculate identifier document frequencies from extracted uasts.",
+        parents=[model2input_arg, filter_arg, process_arg, df_arg])
+    snippet2bow_parser.set_defaults(handler=snippet2bow_entry)
+    snippet2bow_parser.add_argument(
+        "-v", "--vocabulary-size", required=True, type=int,
+        help="Vocabulary size: the tokens with the highest document frequencies will be picked.")
+    snippet2bow_parser.add_argument(
+        "output", help="Where to write the merged nBOW.")
 
     return parser
 
