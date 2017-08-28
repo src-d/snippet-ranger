@@ -100,5 +100,6 @@ def source2func_entry(args):
     functions_bow = process_lib_functions(functions_bow)
 
     converter = Source2Func(args.library_name, functions_bow, log_level=args.log_level,
-                            num_processes=args.processes)
+                            num_processes=args.processes,
+                            overwrite_existing=args.overwrite_existing)
     converter.convert(args.input, args.output, pattern=args.filter)

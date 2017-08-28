@@ -23,7 +23,8 @@ class Snippet2DocFreq(Uast2DocFreq):
 
 
 def snippet2df_entry(args):
-    converter = Snippet2DocFreq(num_processes=args.processes)
+    converter = Snippet2DocFreq(num_processes=args.processes,
+                                overwrite_existing=args.overwrite_existing)
     with tempfile.TemporaryDirectory(dir=args.tmpdir, prefix="snippet2df") as tmpdir:
         converter.convert(args.input, tmpdir, pattern=args.filter)
         joiner = MergeDocFreq(num_processes=1)

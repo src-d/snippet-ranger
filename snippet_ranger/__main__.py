@@ -43,6 +43,11 @@ def get_parser() -> argparse.ArgumentParser:
     df_arg = one_arg_parser(
         "-d", "--df", dest="docfreq", help="URL or path to the document frequencies.")
 
+    disable_overwrite_arg = one_arg_parser(
+        "--disable-overwrite", action="store_false", default=True,
+        dest="overwrite_existing",
+        help="Specify if you want to disable overiting of existing models")
+
     # Create and construct subparsers
 
     subparsers = parser.add_subparsers(help="Commands", dest="command")
@@ -52,7 +57,8 @@ def get_parser() -> argparse.ArgumentParser:
         help="Decompose source model to functions were specified library is used. It makes model "
              "entry from each function that uses library and produce one Function model from one "
              "Source model, but it has more entries because of decomposition.",
-        parents=[model2input_arg, filter_arg, process_arg, library_name_arg])
+        parents=[model2input_arg, filter_arg, process_arg, library_name_arg,
+                 disable_overwrite_arg])
     source2func_parser.set_defaults(handler=source2func_entry)
     source2func_parser.add_argument(
         "--library_source",
@@ -91,13 +97,13 @@ def get_parser() -> argparse.ArgumentParser:
     snippet2df_parser = subparsers.add_parser(
         "snippet2df", help="Calculate identifier document frequencies from uasts for snippets."
                            "It counts each snippet separately.",
-        parents=[model2input_arg, filter_arg, tmpdir_arg, process_arg])
+        parents=[model2input_arg, filter_arg, tmpdir_arg, process_arg, disable_overwrite_arg])
     snippet2df_parser.set_defaults(handler=snippet2df_entry)
     snippet2df_parser.add_argument("output", help="Where to write document frequencies.")
 
     snippet2bow_parser = subparsers.add_parser(
         "snippet2bow", help="Calculate identifier document frequencies from extracted uasts.",
-        parents=[model2input_arg, filter_arg, process_arg, df_arg])
+        parents=[model2input_arg, filter_arg, process_arg, df_arg, disable_overwrite_arg])
     snippet2bow_parser.set_defaults(handler=snippet2bow_entry)
     snippet2bow_parser.add_argument(
         "-v", "--vocabulary-size", required=True, type=int,
