@@ -54,7 +54,7 @@ class Source2Func(Model2BaseSplit):
         func_nodes = uast_role_nodes(uast, FUNCTION_DECLARATION)
         for func_node in func_nodes:
             pos_start, pos_end = func_node.start_position.line-1, func_node.end_position.line
-            func_source = '\n'.join(source.splitlines()[pos_start:pos_end])
+            func_source = "\n".join(source.splitlines()[pos_start:pos_end])
             yield filename, func_source, func_node, pos_start, pos_end
 
     def output_model_object_criteria(self, model_object):

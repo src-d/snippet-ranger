@@ -18,7 +18,7 @@ setup(
     author="source{d}",
     author_email="machine-learning@sourced.tech",
     url="https://github.com/src-d/snippet-ranger",
-    download_url='https://github.com/src-d/snippet-ranger',
+    download_url="https://github.com/src-d/snippet-ranger",
     packages=find_packages(exclude=("snippet_ranger.tests",)),
     keywords=["machine learning on source code", "github", "topic modeling",
               "hierarchical topic modeling", "exploratory code search"],

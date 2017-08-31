@@ -35,7 +35,7 @@ class TestSnippet(unittest.TestCase):
 
     def test_names(self):
         self.assertEqual(self.model.names,
-                         ['./snippet_ranger/snippet_ranger/tests/data/test_repo/example.py_4_11'])
+                         ["./snippet_ranger/snippet_ranger/tests/data/test_repo/example.py_4_11"])
 
     def test_item(self):
         model_item = self.model[0]
