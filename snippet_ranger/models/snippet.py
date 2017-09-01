@@ -12,7 +12,7 @@ class Snippet(Source):
 
     NAME = "snippet"
 
-    def construct(self, repository, filenames, sources, uasts,
+    def construct(self, repository, filenames, uasts, sources,
                   positions_start=None, positions_end=None, positions=None):
         super(Snippet, self).construct(repository=repository, filenames=filenames,
                                        sources=sources, uasts=uasts)

@@ -1,5 +1,4 @@
-import os
-import re
+import logging
 
 from ast2vec.source import Source
 from ast2vec.bblfsh_roles import CALL, CALL_CALLEE, FUNCTION_DECLARATION
@@ -29,6 +28,9 @@ class Source2Func(Model2BaseSplit):
         super(Source2Func, self).__init__(*args, **kwargs)
         self.libname = libname
         self.lib_funcs_bow = lib_funcs_bow
+        self.lib_funcs_bow_set = set(lib_funcs_bow)
+
+        self._log.debug("lib_funcs_bow for {} lib is {}".format(libname, lib_funcs_bow))
         self.threshold = 0
 
     def input_model_object_criteria(self, model_object):
@@ -39,7 +41,8 @@ class Source2Func(Model2BaseSplit):
         :return: Library usage indicator.
         """
         filename, uast, source = model_object
-        return has_import(self.libname, uast)
+        res = has_import(self.libname, uast)
+        return res
 
     def split_model_object(self, model_from, model_object):
         """
@@ -65,10 +68,19 @@ class Source2Func(Model2BaseSplit):
         :param model_object: Source model object.
         :return: Library functions usage indicator.
         """
-        func_node = model_object[2]
+        func_node = model_object[1]
         func_names = uast_to_bag(func_node, role=CALL_CALLEE)
 
-        common = set(self.lib_funcs_bow) & set(func_names)
+        common = self.lib_funcs_bow_set & func_names.keys()
+        if common == 0 and self._log.isEnabledFor(logging.DEBUG):
+            self._log.DEBUG("There is no common functions in func_{}-{}_{}".format(
+                model_object[4], model_object[5], model_object[0]))
+            for key in func_names:
+                if key in model_object[2]:
+                    self._log.DEBUG("But I can find {} in source!".format(key))
+                    self._log.error("Something strange. "
+                                    "Here is the source code file:\n{}".format(model_object[2]))
+                    break
         if len(common) > self.threshold:
             return True
         return False
