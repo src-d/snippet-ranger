@@ -17,19 +17,32 @@ class Snippet(Source):
         super(Snippet, self).construct(repository=repository, filenames=filenames,
                                        sources=sources, uasts=uasts)
         if ((positions_start is None) ^ (positions_end is None)) or \
-                ((positions_start is None) and (positions_end is None) ^ (positions is not None)):
+                ((positions_start is None) ^ (positions is not None)):
             raise ValueError("You should specify both positions_start and positions_end or "
                              "only a positions")
         if positions is None:
+            if len(positions_start) != len(positions_end):
+                raise ValueError("Length of positions_start ({}) and positions_end ({}) "
+                                 "are not equal".format(len(positions_start), len(positions_end)))
             self._positions = np.array(list(zip(positions_start, positions_end)))
         else:
             self._positions = positions
         return self
 
     @property
+    def names(self) -> list:
+        """
+        Creates the list of names for snippets in the model.
+        Usually names are needed for topic modeling to represent different snippets as different
+        documents. See `SnippetModel2BOW` transformer.
+        """
+        return ["{}/{}_{}_{}".format(self._repository, name, st, end)
+                for name, (st, end) in zip(self._filenames, self._positions)]
+
+    @property
     def positions(self):
         """
-        Return start line position of snippets.
+        Return start and end line positions of snippets.
         """
         return self._positions
 
@@ -47,12 +60,19 @@ class Snippet(Source):
         """
         return self._positions[:, 1].T
 
+    def __iter__(self):
+        """
+        Iterator over the items.
+        """
+        return zip(self._filenames, self._uasts, self._sources, self._positions)
+
     def __getitem__(self, item):
         """
-        Returns file name, uast, source code, start and end position for the given snippet index.
+        Returns file name, uast, source code and positions for the given snippet index.
 
         :param item: Snippet index.
-        :return: file name, source code, uast, start and end position
+        :return: file name, source code, uast, positions, where positions[0] is start and \
+            positions[1] is end.
         """
         return super(Snippet, self).__getitem__(item) + (self._positions[item], )
 

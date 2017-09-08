@@ -54,7 +54,7 @@ class Source2Func(Model2BaseSplit):
         func_nodes = uast_role_nodes(uast, FUNCTION_DECLARATION)
         for func_node in func_nodes:
             pos_start, pos_end = func_node.start_position.line-1, func_node.end_position.line
-            func_source = '\n'.join(source.splitlines()[pos_start:pos_end])
+            func_source = "\n".join(source.splitlines()[pos_start:pos_end])
             yield filename, func_source, func_node, pos_start, pos_end
 
     def output_model_object_criteria(self, model_object):
@@ -100,5 +100,6 @@ def source2func_entry(args):
     functions_bow = process_lib_functions(functions_bow)
 
     converter = Source2Func(args.library_name, functions_bow, log_level=args.log_level,
-                            num_processes=args.processes)
+                            num_processes=args.processes,
+                            overwrite_existing=args.overwrite_existing)
     converter.convert(args.input, args.output, pattern=args.filter)
