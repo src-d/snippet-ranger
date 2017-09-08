@@ -54,11 +54,15 @@ class Source2Func(Model2BaseSplit):
         :return: parameters for :class:`Snippet` model __init__.
         """
         filename, uast, source = model_object
+        have_funcs = False
         func_nodes = uast_role_nodes(uast, FUNCTION_DECLARATION)
         for func_node in func_nodes:
+            have_funcs = True
             pos_start, pos_end = func_node.start_position.line-1, func_node.end_position.line
             func_source = "\n".join(source.splitlines()[pos_start:pos_end])
-            yield filename, func_source, func_node, pos_start, pos_end
+            yield filename, func_node, func_source, pos_start, pos_end
+        if not have_funcs:
+            yield filename, uast, source, 0, source.count("\n")
 
     def output_model_object_criteria(self, model_object):
         """
