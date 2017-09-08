@@ -36,7 +36,8 @@ class Snippet(Source):
         Usually names are needed for topic modeling to represent different snippets as different
         documents. See `SnippetModel2BOW` transformer.
         """
-        return ["{}/{}_{}_{}".format(self._repository, name, st, end)
+        return ["{}/{}_{}_{}".format(self._repository, name, st, end).
+                replace(":", "").replace(" ", "_")
                 for name, (st, end) in zip(self._filenames, self._positions)]
 
     @property
