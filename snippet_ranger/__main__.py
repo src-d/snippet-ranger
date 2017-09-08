@@ -37,9 +37,9 @@ def get_parser() -> argparse.ArgumentParser:
     library_name_arg = one_arg_parser(
         "--library_name", help="Provide the name of the library.")
 
-    library_source_arg = one_arg_parser(
-        "--library_source", help="Provide the source model of the library. "
-                                 "You can build it via ast2vec repo2source call.")
+    library_uast_arg = one_arg_parser(
+        "--library_uast", help="Provide the UAST model of the library. "
+                               "You can build it via ast2vec repo2uast call.")
 
     tmpdir_arg = one_arg_parser(
         "--tmpdir", help="Store intermediate files in this directory instead of /tmp.")
@@ -65,7 +65,7 @@ def get_parser() -> argparse.ArgumentParser:
         help="Decompose source model to functions were specified library is used. It makes model "
              "entry from each function that uses library and produce one Function model from one "
              "Source model, but it has more entries because of decomposition.",
-        parents=[model2input_arg, filter_arg, process_arg, library_name_arg, library_source_arg,
+        parents=[model2input_arg, filter_arg, process_arg, library_name_arg, library_uast_arg,
                  disable_overwrite_arg])
     source2func_parser.set_defaults(handler=source2func_entry)
 
@@ -110,7 +110,7 @@ def get_parser() -> argparse.ArgumentParser:
         "snippet2fc_df", help="Calculate document frequencies from Function Calls in extracted "
                               "snippets. It counts each snippet separately.",
         parents=[model2input_arg, filter_arg, tmpdir_arg, process_arg, disable_overwrite_arg,
-                 library_name_arg, library_source_arg])
+                 library_name_arg, library_uast_arg])
     snippet2df_parser.set_defaults(handler=snippet2fc_df_entry)
     snippet2df_parser.add_argument("output", help="Where to write document frequencies.")
 

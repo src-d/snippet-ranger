@@ -1,5 +1,6 @@
 import logging
 
+from ast2vec.uast import UASTModel
 from ast2vec.source import Source
 from ast2vec.bblfsh_roles import CALL, CALL_CALLEE, FUNCTION_DECLARATION
 from snippet_ranger.model2.base_split import Model2BaseSplit
@@ -111,7 +112,7 @@ def process_lib_functions(functions_bow):
 
 
 def source2func_entry(args):
-    lib_model = Source().load(args.library_source)
+    lib_model = UASTModel().load(args.library_uast)
     functions_bow = get_func_names_bow(lib_model)
     functions_bow = process_lib_functions(functions_bow)
 

@@ -54,7 +54,7 @@ def snippet2df_entry(args):
 
 
 def snippet2fc_df_entry(args):
-    lib_model = Source().load(args.library_source)
+    lib_model = Source().load(args.library_uast)
     functions_bow = get_func_names_bow(lib_model)
     functions_bow = process_lib_functions(functions_bow)
 
