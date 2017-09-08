@@ -1,6 +1,6 @@
 ## Snippet ranger
 
-[![Build Status](https://travis-ci.org/src-d/snippet-ranger.svg)](https://travis-ci.org/src-d/snippet-ranger) [![codecov](https://codecov.io/github/src-d/snippet-ranger/coverage.svg?branch=develop)](https://codecov.io/gh/src-d/snippet-ranger)
+[![Build Status](https://travis-ci.org/src-d/snippet-ranger.svg)](https://travis-ci.org/src-d/snippet-ranger) [![codecov](https://codecov.io/github/src-d/snippet-ranger/coverage.svg)](https://codecov.io/gh/src-d/snippet-ranger)
 
 This tool is built on top of [ast2vec](https://github.com/src-d/ast2vec) Machine Learning models.
 
