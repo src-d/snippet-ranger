@@ -54,7 +54,7 @@ class Source2FuncTests(unittest.TestCase):
 
     def test_source2func_object(self):
         with tempfile.TemporaryDirectory() as tmpdir:
-            args = argparse.Namespace(library_source=models.TEST_LIB,
+            args = argparse.Namespace(library_uast=models.TEST_LIB,
                                       library_name=models.LIB_NAME,
                                       input=models.DATA_DIR,
                                       output=tmpdir,
