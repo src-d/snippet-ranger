@@ -2,7 +2,7 @@ import unittest
 
 import asdf
 import numpy as np
-from bblfsh.github.com.bblfsh.sdk.uast.generated_pb2 import Node
+from ast2vec.bblfsh_roles import Node
 
 from modelforge import split_strings
 from snippet_ranger.models.snippet import Snippet

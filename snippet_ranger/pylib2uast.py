@@ -3,6 +3,7 @@ import logging
 from ast2vec.repo2.uast import repos2uast_entry
 from ast2vec.enry import install_enry
 
+
 def pylib2uast_entry(args):
     log = logging.getLogger("pylib2uast")
     module_names = args.input
