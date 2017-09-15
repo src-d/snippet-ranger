@@ -26,7 +26,7 @@ setup(
         "console_scripts": ["snippet_ranger=snippet_ranger.__main__:main"],
     },
     install_requires=["pandas>=0.20",
-                      "ast2vec>=0.2.3-alpha"] + typing,
+                      "ast2vec>=0.2.6-alpha"] + typing,
     package_data={"": ["LICENSE", "README.md"]},
     classifiers=[
         "Development Status :: 3 - Alpha",

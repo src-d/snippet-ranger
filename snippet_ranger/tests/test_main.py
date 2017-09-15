@@ -29,7 +29,10 @@ class MainTests(unittest.TestCase):
             "source2func": "source2func_entry",
             "dependent_reps": "dependent_reps_entry",
             "snippet2df": "snippet2df_entry",
-            "snippet2bow": "snippet2bow_entry"
+            "snippet2bow": "snippet2bow_entry",
+            "snippet2fc_bow": "snippet2fc_bow_entry",
+            "snippet2fc_df": "snippet2fc_df_entry"
+
         }
         parser = main.get_parser()
         subcommands = set([x.dest for x in parser._subparsers._actions[2]._choices_actions])

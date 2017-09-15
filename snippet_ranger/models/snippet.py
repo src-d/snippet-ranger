@@ -12,7 +12,7 @@ class Snippet(Source):
 
     NAME = "snippet"
 
-    def construct(self, repository, filenames, sources, uasts,
+    def construct(self, repository, filenames, uasts, sources,
                   positions_start=None, positions_end=None, positions=None):
         super(Snippet, self).construct(repository=repository, filenames=filenames,
                                        sources=sources, uasts=uasts)
@@ -36,7 +36,8 @@ class Snippet(Source):
         Usually names are needed for topic modeling to represent different snippets as different
         documents. See `SnippetModel2BOW` transformer.
         """
-        return ["{}/{}_{}_{}".format(self._repository, name, st, end)
+        return ["{}/{}_{}_{}".format(self._repository, name, st, end).
+                replace(":", "").replace(" ", "_")
                 for name, (st, end) in zip(self._filenames, self._positions)]
 
     @property

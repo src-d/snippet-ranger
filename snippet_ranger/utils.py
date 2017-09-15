@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from ast2vec import Source
+from ast2vec import UASTModel
 from ast2vec import bblfsh_roles
 
 
@@ -82,7 +82,7 @@ def has_import(libname, uast) -> bool:
     return False
 
 
-def get_func_names_bow(source_model: Source) -> dict:
+def get_func_names_bow(source_model: UASTModel) -> dict:
     """
     Returns bag of words for functions in all Source model.
 
@@ -90,6 +90,6 @@ def get_func_names_bow(source_model: Source) -> dict:
     :return: dictionary with words as keys
     """
     func_names = None
-    for filename, uast, source in source_model:
-        func_names = uast_to_bag(uast, func_names, bblfsh_roles.FUNCTION_DECLARATION_NAME)
+    for record in source_model:
+        func_names = uast_to_bag(record[1], func_names, bblfsh_roles.FUNCTION_DECLARATION_NAME)
     return func_names

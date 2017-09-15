@@ -6,7 +6,7 @@ import tempfile
 
 import asdf
 from ast2vec import Source
-from bblfsh.github.com.bblfsh.sdk.uast.generated_pb2 import Node
+from ast2vec.bblfsh_roles import Node
 from modelforge import split_strings
 
 from snippet_ranger.model2.source2func import Source2Func
@@ -31,7 +31,7 @@ class Source2FuncTests(unittest.TestCase):
         self.assertEqual(out_bow, {"xxx": 1, "yyy": 1})
 
     def test_convert_model(self):
-        from bblfsh.github.com.bblfsh.sdk.uast.generated_pb2 import Node
+        from ast2vec.bblfsh_roles import Node
 
         lib_model = Source().load(models.TEST_LIB)
         functions_bow = get_func_names_bow(lib_model)
@@ -54,7 +54,7 @@ class Source2FuncTests(unittest.TestCase):
 
     def test_source2func_object(self):
         with tempfile.TemporaryDirectory() as tmpdir:
-            args = argparse.Namespace(library_source=models.TEST_LIB,
+            args = argparse.Namespace(library_uast=models.TEST_LIB,
                                       library_name=models.LIB_NAME,
                                       input=models.DATA_DIR,
                                       output=tmpdir,
