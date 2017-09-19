@@ -1,14 +1,17 @@
 import argparse
 import logging
+import multiprocessing
 import sys
 
 from modelforge.logs import setup_logging
 from ast2vec.__main__ import one_arg_parser
+from ast2vec.repo2.base import DEFAULT_BBLFSH_TIMEOUT, DEFAULT_BBLFSH_ENDPOINTS
 
 from snippet_ranger.model2.source2func import source2func_entry
 from snippet_ranger.librariesio_fetcher import dependent_reps_entry, LibrariesIOFetcher
 from snippet_ranger.model2.snippet2df import snippet2df_entry, snippet2fc_df_entry
 from snippet_ranger.model2.snippet2bow import snippet2bow_entry, snippet2fc_bow_entry
+from snippet_ranger.pylib2uast import pylib2uast_entry
 
 
 def get_parser() -> argparse.ArgumentParser:
@@ -56,6 +59,33 @@ def get_parser() -> argparse.ArgumentParser:
         "-v", "--vocabulary-size", required=True, type=int,
         help="Vocabulary size: the tokens with the highest document frequencies will be picked.")
 
+    bblfsh_args = argparse.ArgumentParser(add_help=False)
+    bblfsh_args.add_argument(
+        "--bblfsh", dest="bblfsh_endpoint",
+        help="Babelfish server's endpoint, e.g. 0.0.0.0:9432. "
+             "You can specify it directly or with BBLFSH_ENDPOINT environment variable. Otherwise "
+             "default will be used (default: %s)" % DEFAULT_BBLFSH_ENDPOINTS)
+    bblfsh_args.add_argument(
+        "--timeout", type=int,
+        help="Babelfish timeout - longer requests are dropped. "
+             "You can specify it directly or with BBLFSH_TIMEOUT environment variable. Otherwise "
+             "default will be used (default: %d sec)" % DEFAULT_BBLFSH_TIMEOUT)
+
+    linguist_arg = one_arg_parser(
+        "--linguist", help="Path to src-d/enry executable.")
+
+    output_dir_arg_asdf = one_arg_parser(
+        "-o", "--output", required=True, help="Output path where the .asdf will be stored.")
+
+    process_1_2_arg = one_arg_parser(
+        "-p", "--processes", type=int, default=2, dest="num_processes",
+        help="Number of parallel processes to run. Since every process "
+             "spawns the number of threads equal to the number of CPU cores "
+             "it is better to set this to 1 or 2.")
+    threads_arg = one_arg_parser(
+        "-t", "--threads", type=int, default=multiprocessing.cpu_count(),
+        help="Number of threads in the UASTs extraction process.")
+
     # Create and construct subparsers
 
     subparsers = parser.add_subparsers(help="Commands", dest="command")
@@ -94,7 +124,8 @@ def get_parser() -> argparse.ArgumentParser:
              "<library name>.txt . You can specify file, then all urls will be saved in one file.")
     dependent_reps_parser.add_argument(
         "--librariesio_data", required=True,
-        help="Provide the path to libraries.io dataset.")
+        help="Provide the path to libraries.io (v1.0.0) dataset. "
+             "You can download it from https://libraries.io/data.")
     dependent_reps_parser.add_argument(
         "--platform", default=LibrariesIOFetcher.DEFAULT_PLATFORM,
         help="The name of package manager.")
@@ -129,6 +160,14 @@ def get_parser() -> argparse.ArgumentParser:
     snippet2fc_bow_parser.set_defaults(handler=snippet2fc_bow_entry)
     snippet2fc_bow_parser.add_argument(
         "output", help="Where to write the merged nBOW.")
+
+    snippet2fc_bow_parser = subparsers.add_parser(
+        "pylib2uast", help="Converts installed python library to UAST model.",
+        parents=[linguist_arg, output_dir_arg_asdf, bblfsh_args, process_1_2_arg,
+                 threads_arg, disable_overwrite_arg])
+    snippet2fc_bow_parser.set_defaults(handler=pylib2uast_entry)
+    snippet2fc_bow_parser.add_argument(
+        "input", nargs='+', help="library names.")
 
     return parser
 
