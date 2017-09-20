@@ -31,7 +31,8 @@ class MainTests(unittest.TestCase):
             "snippet2df": "snippet2df_entry",
             "snippet2bow": "snippet2bow_entry",
             "snippet2fc_bow": "snippet2fc_bow_entry",
-            "snippet2fc_df": "snippet2fc_df_entry"
+            "snippet2fc_df": "snippet2fc_df_entry",
+            "pylib2uast": "pylib2uast_entry"
 
         }
         parser = main.get_parser()

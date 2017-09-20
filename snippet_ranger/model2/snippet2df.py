@@ -4,7 +4,7 @@ from typing import Union
 from ast2vec.model2.source2df import Uast2DocFreq, MergeDocFreq
 from ast2vec.df import DocumentFrequencies
 from ast2vec.bblfsh_roles import SIMPLE_IDENTIFIER, CALL_CALLEE
-from ast2vec.source import Source
+from ast2vec.source import UASTModel
 from ast2vec.uast_ids_to_bag import UastIds2Bag
 from snippet_ranger.utils import get_func_names_bow
 from snippet_ranger.model2.source2func import process_lib_functions
@@ -54,7 +54,7 @@ def snippet2df_entry(args):
 
 
 def snippet2fc_df_entry(args):
-    lib_model = Source().load(args.library_uast)
+    lib_model = UASTModel().load(args.library_uast)
     functions_bow = get_func_names_bow(lib_model)
     functions_bow = process_lib_functions(functions_bow)
 
