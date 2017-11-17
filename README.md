@@ -135,7 +135,7 @@ You should install BigARTM library.
 Easy way is to use `ast2vec bigartm` command (not implemented yet).
 
 You can checkout 
-[simple draft experiment using BigARTM Python API notebook](https://github.com/src-d/snipper-ranger/blob/master/experiments/BigARTM_run_example.ipynb).
+[simple draft experiment using BigARTM Python API notebook](https://github.com/src-d/snippet-ranger/blob/master/experiments/BigARTM_run_example.ipynb).
 
 ## Contributions
 [![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg)](https://www.python.org/dev/peps/pep-0008/)
